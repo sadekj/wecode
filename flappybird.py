@@ -1,5 +1,6 @@
 import wecode
 running = True
+score = 0
 rectangle1 = {'x':200, 'y':wecode.get_screen_height(), 'width':12, 'height':214, 'dx': -8, 'dy':0 ,'color':'red'}
 rectangle2 = {'x':200, 'y':-300, 'width':12, 'height':214, 'dx': -8, 'dy':0}
 
@@ -75,6 +76,7 @@ wecode.goto(-wecode.get_screen_width(),0)
 wecode.goto(wecode.get_screen_width(),0)
 
 def check_walls(rectangles):
+	global score
 	for r in rectangles:
 		if (r.xcor() <= - wecode.get_screen_width()):
 			random_y = wecode.get_random_y()
@@ -85,7 +87,9 @@ def check_walls(rectangles):
 			if (r.ycor() > 0 and random_y > 0):
 				r.goto(r.xcor(),random_y)
 
-			r.goto(wecode.get_screen_width(),r.ycor()) 
+			r.goto(wecode.get_screen_width(),r.ycor())
+			r.color("black")
+			score +=1
 
 def move_user_rect(user_rect):
 	user_rect.set_dy(3)
@@ -97,11 +101,12 @@ def rects_collide(rect1, rect2):
 	return False
 
 def rects_collision(rectangles,user_rect):
-	global running
+	global running, score
 	for rect1 in rectangles:
 		if (rect1 != user_rect and rects_collide(rect1,user_rect)):
 			rect1.color("red")
-			print ("you lost")
+			score -=1
+			#print ("you lost")
 			#running = False
 
 while(running):
@@ -111,5 +116,6 @@ while(running):
 	if (wecode.UpKeyPressed):
 		move_user_rect(user_rect)
 	wecode.move_rectangles(rectangles)
+	print(score)
 
 wecode.mainloop()
